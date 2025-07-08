@@ -1,0 +1,42 @@
+# PowerShell
+*.ps1xml
+*_profile.ps1
+*_profile.xml
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+*.cab
+*.msi
+*.msm
+*.msp
+*.lnk
+
+# VS Code
+.vscode/
+*.code-workspace
+
+# Logs and temporary files
+*.log
+*.tmp
+*.temp
+temp/
+logs/
+
+# CSV exports (user data should not be committed)
+*.csv
+*_Users_*.csv
+EntraID_Users_*.csv
+
+# Backup directories (optional - you may want to exclude these)
+backup-*/
+
+# Authentication cache files
+TokenCache.dat
+.graph/
+
+# Environment specific files
+config.local.ps1
+settings.local.ps1
