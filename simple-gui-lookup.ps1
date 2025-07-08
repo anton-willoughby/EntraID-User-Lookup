@@ -74,7 +74,7 @@ function Connect-ToGraph {
                 
                 # Try interactive authentication first
                 try {
-                    Connect-MgGraph -Scopes @("User.Read.All", "Directory.Read.All") -NoWelcome -ErrorAction Stop
+                    Connect-MgGraph -Scopes @("User.Read.All", "Directory.Read.All", "AuditLog.Read.All") -NoWelcome -ErrorAction Stop
                     $authSuccess = $true
                 }
                 catch {
@@ -89,7 +89,7 @@ function Connect-ToGraph {
                         # Clean up any partial connection
                         try { Disconnect-MgGraph -ErrorAction SilentlyContinue } catch {}
                         
-                        Connect-MgGraph -Scopes @("User.Read.All", "Directory.Read.All") -UseDeviceAuthentication -NoWelcome -ErrorAction Stop
+                        Connect-MgGraph -Scopes @("User.Read.All", "Directory.Read.All", "AuditLog.Read.All") -UseDeviceAuthentication -NoWelcome -ErrorAction Stop
                         $authSuccess = $true
                     }
                     catch {
@@ -351,7 +351,7 @@ function Search-SpecificUser {
             # Get full user details
             $userDetails = Get-MgUser -UserId $user.Id -Property @(
                 "Id", "DisplayName", "UserPrincipalName", "Mail", "Department", 
-                "JobTitle", "AccountEnabled", "CreatedDateTime", "LastSignInDateTime", 
+                "JobTitle", "AccountEnabled", "CreatedDateTime", "SignInActivity", 
                 "CompanyName", "Country", "City", "OfficeLocation", "MobilePhone", 
                 "BusinessPhones", "Manager"
             )
@@ -395,8 +395,33 @@ function Display-UserDetails {
     $officeTextBox.Text = $User.OfficeLocation
     $mobileTextBox.Text = $User.MobilePhone
     $businessPhoneTextBox.Text = ($User.BusinessPhones -join ', ')
-    $createdTextBox.Text = $User.CreatedDateTime
-    $lastSignInTextBox.Text = $User.LastSignInDateTime
+    
+    # Format CreatedDateTime
+    if ($User.CreatedDateTime) {
+        try {
+            $createdDate = [DateTime]::Parse($User.CreatedDateTime)
+            $createdTextBox.Text = $createdDate.ToString("yyyy-MM-dd HH:mm:ss")
+        }
+        catch {
+            $createdTextBox.Text = $User.CreatedDateTime
+        }
+    } else {
+        $createdTextBox.Text = "Not available"
+    }
+    
+    # Handle LastSignInDateTime from SignInActivity property
+    if ($User.SignInActivity -and $User.SignInActivity.LastSignInDateTime) {
+        try {
+            $lastSignInDate = [DateTime]::Parse($User.SignInActivity.LastSignInDateTime)
+            $lastSignInTextBox.Text = $lastSignInDate.ToString("yyyy-MM-dd HH:mm:ss")
+        }
+        catch {
+            $lastSignInTextBox.Text = $User.SignInActivity.LastSignInDateTime
+        }
+    } else {
+        $lastSignInTextBox.Text = "Never signed in"
+    }
+    
     $userIdTextBox.Text = $User.Id
     
     # Enable export button
