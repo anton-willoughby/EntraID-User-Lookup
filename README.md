@@ -58,6 +58,8 @@ EntraID/
 ├── run-gui-admin.bat        # Administrator launcher
 ├── README.md                # This documentation
 ├── TROUBLESHOOTING.md       # Troubleshooting guide
+├── CHANGELOG-LastSignInFix.md # Recent changes documentation
+├── LICENSE                  # MIT License
 └── backup-20250708-152900/  # Backup of removed legacy files
 ```
 
@@ -119,3 +121,13 @@ For issues or questions:
 1. Check `TROUBLESHOOTING.md` for common solutions
 2. Verify your Microsoft Graph permissions
 3. Ensure you're running with appropriate PowerShell execution policy
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## Acknowledgments
+
+- **GitHub Copilot**: For generating 100% of this codebase
+- **Microsoft Graph API**: For providing the user data access
+- **PowerShell Community**: For the robust scripting platform
